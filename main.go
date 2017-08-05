@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+
 	"github.com/novikk/splitbot/hutoma"
 	"github.com/novikk/splitbot/webhooks"
 
