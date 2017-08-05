@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/novikk/splitbot/hutoma"
+	"github.com/novikk/splitbot/sage"
 	"github.com/novikk/splitbot/webhooks"
 
 	"gopkg.in/telegram-bot-api.v4"
@@ -31,6 +32,13 @@ func init() {
 
 	// init telegram
 	TELEGRAM_TOKEN = os.Getenv("TELEGRAM_TOKEN")
+	s := sage.SageClient{}
+	s.RefreshToken = "4109e944807d9f7cda0c345fed136564a4a26501"
+	s.AccessToken = "9b872d0717eff2e296557dd09f0db4d2076a369a"
+	s.ResourceOwnerID = "cd955c24cdd52c60fa835a1ff54ffb4d"
+	s.ExpirationDate = 1501951648
+
+	fmt.Println(s.ShowContacts())
 }
 
 func startTelegramBot() {
