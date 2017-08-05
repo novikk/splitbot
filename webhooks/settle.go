@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func HandleExpense(w http.ResponseWriter, r *http.Request) {
+func HandleSettleDebt(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handle webhook")
 
 	var body map[string]interface{}
@@ -21,8 +21,5 @@ func HandleExpense(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("HOW MUCH ---->", howMuch)
 	fmt.Println("WHO ---->", who)
 
-	msg := fmt.Sprintf("Perfect! I have recorded that %s owes %s to %s :)", who, howMuch, lastSpeaker)
-
-	w.Write([]byte(`{"text":"` + msg + `"}`))
 	//fmt.Println(string(b))
 }

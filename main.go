@@ -93,8 +93,8 @@ func startTelegramBot() {
 func startWebhooks() {
 	webhooksRouter := mux.NewRouter().StrictSlash(true)
 	webhooksRouter.HandleFunc("/expense", webhooks.HandleExpense)
-	webhooksRouter.HandleFunc("/pays_next", webhooks.HandleExpense)
-	webhooksRouter.HandleFunc("/settle_debt", webhooks.HandleExpense)
+	webhooksRouter.HandleFunc("/pays_next", webhooks.HandlePaysNext)
+	webhooksRouter.HandleFunc("/settle_debt", webhooks.HandleSettleDebt)
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), webhooksRouter))
 }
