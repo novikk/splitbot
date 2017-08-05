@@ -58,12 +58,12 @@ func startTelegramBot() {
 			return
 		}
 
+		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+		log.Printf("[Hutoma] %s", hres.Result.Answer)
+
 		if hres.Result.Answer == "unknown" {
 			return
 		}
-
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-		log.Printf("[Hutoma] %s", hres.Result.Answer)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, hres.Result.Answer)
 		// msg.ReplyToMessageID = update.Message.MessageID
