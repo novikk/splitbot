@@ -1,7 +1,6 @@
 package webhooks
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -10,9 +9,9 @@ import (
 func HandleExpense(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handle webhook")
 
-	var body interface{}
+	//var body interface{}
 	b, _ := ioutil.ReadAll(r.Body)
-	json.Unmarshal(b, &body)
+	//json.Unmarshal(b, &body)
 
-	fmt.Println(body)
+	fmt.Println(string(b))
 }
