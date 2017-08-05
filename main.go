@@ -58,6 +58,10 @@ func startTelegramBot() {
 			return
 		}
 
+		if hres.Result.Answer == "Erm... What?" {
+			return
+		}
+
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 		log.Printf("[Hutoma] %s", hres.Result.Answer)
 
