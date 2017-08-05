@@ -77,7 +77,8 @@ func startTelegramBot() {
 
 func startWebhooks() {
 	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/webhook", webhooks.HandleWebhook)
+	myRouter.HandleFunc("/expense", webhooks.HandleExpense)
+	//myRouter.HandleFunc("/webhook", webhooks.HandleWebhook)
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), myRouter))
 }
