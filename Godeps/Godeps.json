@@ -1,0 +1,22 @@
+{
+	"ImportPath": "github.com/novikk/splitbot",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.1-21-gcf79e51",
+			"Rev": "cf79e51a62d8219d52060dfc1b4e810414ba2d15"
+		},
+		{
+			"ImportPath": "github.com/technoweenie/multipartstreamer",
+			"Comment": "v1.0.1",
+			"Rev": "a90a01d73ae432e2611d178c18367fbaa13e0154"
+		},
+		{
+			"ImportPath": "gopkg.in/telegram-bot-api.v4",
+			"Comment": "v4.6",
+			"Rev": "0a57807db79efce7f6719fbb2c0e0f83fda79aec"
+		}
+	]
+}
