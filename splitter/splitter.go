@@ -150,7 +150,9 @@ func (s *Splitter) GetBalanceLeaderboard() []Leaderboard {
 	sort.Sort(ByBalance(s.people))
 	var res []Leaderboard
 	for i := range s.people {
-		res = append(res, Leaderboard{s.people[i].Name + " " + s.people[i].LastName, s.people[i].Balance})
+		if s.people[i].Balance > 0 {
+			res = append(res, Leaderboard{s.people[i].Name + " " + s.people[i].LastName, s.people[i].Balance})
+		}
 	}
 
 	return res
