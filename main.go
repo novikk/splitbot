@@ -15,15 +15,20 @@ var HUTOMA_BOT_ID string
 var HUTOMA_DEV_KEY string
 var HUTOMA_CLIENT_KEY string
 
+var TELEGRAM_TOKEN string
+
 func init() {
 	// init hutoma vars from environment
 	HUTOMA_BOT_ID = os.Getenv("HUTOMA_BOT_ID")
 	HUTOMA_DEV_KEY = os.Getenv("HUTOMA_DEV_KEY")
 	HUTOMA_CLIENT_KEY = os.Getenv("HUTOMA_CLIENT_KEY")
+
+	// init telegram
+	TELEGRAM_TOKEN = os.Getenv("TELEGRAM_TOKEN")
 }
 
 func startTelegramBot() {
-	bot, err := tgbotapi.NewBotAPI("426886257:AAFevPoGCZlgDVPfeIrmjLLn-hRZyBw8boU")
+	bot, err := tgbotapi.NewBotAPI(TELEGRAM_TOKEN)
 	if err != nil {
 		log.Panic(err)
 	}
