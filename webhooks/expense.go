@@ -28,5 +28,6 @@ func HandleExpense(w http.ResponseWriter, r *http.Request) {
 	}
 
 	split.RegisterExpense(lastSpeaker, who, "", hmint)
+	go sc.AddContact(lastSpeaker, "CUSTOMER")
 	w.Write([]byte(`{"text":"` + msg + `"}`))
 }
