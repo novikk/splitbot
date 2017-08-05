@@ -46,14 +46,14 @@ func (sc *SageClient) getHeaders(apiURL, methodType string, params interface{}) 
 	headersBody.Url = apiURL
 	headersBody.HttpMethod = methodType
 
-	if methodType == "POST" {
+	if methodType == "GET" {
 		headersBody.Parameters = params
 	} else {
 		headersBody.Body = params
 	}
 
 	jsonValue, err := json.Marshal(headersBody)
-	//fmt.Println("JSONVALUE", string(jsonValue))
+	fmt.Println("JSONVALUE", string(jsonValue))
 	if err != nil {
 		return response, errors.New("Failed unmarshaling " + err.Error())
 	}
@@ -92,20 +92,62 @@ func (sc *SageClient) getHeaders(apiURL, methodType string, params interface{}) 
 	return response, nil
 }
 
-/*func (sc *SageClient) AddContact(name, contact_type_id string) error {
-	params := //name, contact_type_id
-	sc.getHeaders("https://api.columbus.sage.com/fr/sageone/accounts/v3/contacts", "POST",)
+func (sc *SageClient) AddContact(name, contact_type_id string) error {
+	params := make(map[string]map[string]interface{}) //name, contact_type_id
+	params["contact"] = make(map[string]interface{})
+	params["contact"]["name"] = name
+	params["contact"]["contact_type_ids"] = []string{contact_type_id}
+
+	var headers sr.HeadersResponse
+	headers, err := sc.getHeaders("https://api.columbus.sage.com/uki/sageone/accounts/v3/contacts", "POST", params)
+	if err != nil {
+		return errors.New("error calling getHeaders: " + err.Error())
+	}
+
+	contactsURL := "https://api.columbus.sage.com/uki/sageone/accounts/v3/contacts"
+	paramsM, err := json.Marshal(params)
+	fmt.Println(params)
+
+	if err != nil {
+		return errors.New("error on Marshall: " + err.Error())
+	}
+	req, err := http.NewRequest("POST", contactsURL, bytes.NewBuffer(paramsM))
+	if err != nil {
+		return errors.New("Http error: " + err.Error())
+	}
+
+	for k, v := range headers.Headers {
+		fmt.Println(k, v)
+		req.Header.Set(k, v)
+	}
+
+	// hdstr, _ := json.Marshal(req.Header)
+	// fmt.Println(string(hdstr))
+
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return errors.New("Http error: " + err.Error())
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return errors.New("Error reading body")
+	}
+	fmt.Println(string(body))
+
 	return nil
-}*/
+}
 func (sc *SageClient) ShowContacts() error {
 	var headers sr.HeadersResponse
-	headers, err := sc.getHeaders("https://api.columbus.sage.com/fr/sageone/accounts/v3/contacts", "GET", nil)
+	headers, err := sc.getHeaders("https://api.columbus.sage.com/uki/sageone/accounts/v3/contacts", "GET", nil)
 	if err != nil {
 		return errors.New("error calling getHeaders: " + err.Error())
 	}
 	//fmt.Println(headers)
 
-	contactsURL := "https://api.columbus.sage.com/fr/sageone/accounts/v3/contacts"
+	contactsURL := "https://api.columbus.sage.com/uki/sageone/accounts/v3/contacts"
 	req, err := http.NewRequest("GET", contactsURL, nil)
 	if err != nil {
 		return errors.New("Http error: " + err.Error())
@@ -133,9 +175,91 @@ func (sc *SageClient) ShowContacts() error {
 	fmt.Println(string(body))
 
 	return nil
-} /*
-func (sc *SageClient) AddExpenditure() error {
-	sc.getHeaders("https://api.columbus.sage.com/fr/sageone/accounts/v3/purchase_invoices", "POST",)
+}
+func (sc *SageClient) AddExpenditure(whoPaid string, amount int) error {
+	params := make(map[string]map[string]interface{}) //name, contact_type_id
+	params["other_payment"] = make(map[string]interface{})
+	params["other_payment"]["transaction_type_id"] = "OTHER_RECEIPT"
+	params["other_payment"]["date"] = "05-08-2017"
+	params["other_payment"]["total_amount"] = amount
+	params["other_payment"]["payment_lines"] = make([]string, 2)
+	params["other_payment"]["payment_lines"].([]string)[0] = "1"
+	params["other_payment"]["payment_lines"].([]string)[1] = "amount"
+	var headers sr.HeadersResponse
+	headers, err := sc.getHeaders("https://api.columbus.sage.com/uki/sageone/accounts/v3/other_payments", "POST", params)
+	if err != nil {
+		return errors.New("error calling getHeaders: " + err.Error())
+	}
+
+	contactsURL := "https://api.columbus.sage.com/uki/sageone/accounts/v3/other_payments"
+	paramsM, err := json.Marshal(params)
+	fmt.Println(params)
+
+	if err != nil {
+		return errors.New("error on Marshall: " + err.Error())
+	}
+	req, err := http.NewRequest("POST", contactsURL, bytes.NewBuffer(paramsM))
+	if err != nil {
+		return errors.New("Http error: " + err.Error())
+	}
+
+	for k, v := range headers.Headers {
+		fmt.Println(k, v)
+		req.Header.Set(k, v)
+	}
+
+	// hdstr, _ := json.Marshal(req.Header)
+	// fmt.Println(string(hdstr))
+
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return errors.New("Http error: " + err.Error())
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return errors.New("Error reading body")
+	}
+	fmt.Println(string(body))
 
 	return nil
-}*/
+}
+func (sc *SageClient) GetBalances() error {
+	var headers sr.HeadersResponse
+	headers, err := sc.getHeaders("https://api.columbus.sage.com/uki/sageone/accounts/v3/other_payments", "GET", nil)
+	if err != nil {
+		return errors.New("error calling getHeaders: " + err.Error())
+	}
+	//fmt.Println(headers)
+
+	contactsURL := "https://api.columbus.sage.com/uki/sageone/accounts/v3/other_payments"
+	req, err := http.NewRequest("GET", contactsURL, nil)
+	if err != nil {
+		return errors.New("Http error: " + err.Error())
+	}
+
+	for k, v := range headers.Headers {
+		fmt.Println(k, v)
+		req.Header.Set(k, v)
+	}
+
+	// hdstr, _ := json.Marshal(req.Header)
+	// fmt.Println(string(hdstr))
+
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return errors.New("Http error: " + err.Error())
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return errors.New("Error reading body")
+	}
+	fmt.Println(string(body))
+
+	return nil
+}
