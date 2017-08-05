@@ -1,25 +1,17 @@
 package webhooks
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
 
 func HandleSettleDebt(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Handle webhook")
+	payments := split.RemoveDebt(lastSpeaker)
+	msg := fmt.Sprintf("Okay! Here's the list of payments you must perform\n")
 
-	var body map[string]interface{}
-	b, _ := ioutil.ReadAll(r.Body)
-	json.Unmarshal(b, &body)
+	for _, p := range payments {
+		msg += fmt.Sprintf("* %d to %s\n", p.Quantity, p.To.Name+" "+p.To.LastName)
+	}
 
-	vars := body["variablesMap"].(map[string]interface{})
-	howMuch := vars["how_much"].(map[string]interface{})["value"].(string)
-	who := vars["who"].(map[string]interface{})["value"].(string)
-
-	fmt.Println("HOW MUCH ---->", howMuch)
-	fmt.Println("WHO ---->", who)
-
-	//fmt.Println(string(b))
+	w.Write([]byte(`{"text":"` + msg + `"}`))
 }
