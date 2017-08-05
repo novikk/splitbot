@@ -15,6 +15,7 @@ type HutomaClient struct {
 	BotID     string
 	DevKey    string
 	ClientKey string
+	ChatID    string
 }
 
 func (c *HutomaClient) Chat(query string) (hutomaChatResponse, error) {
@@ -45,6 +46,10 @@ func (c *HutomaClient) Chat(query string) (hutomaChatResponse, error) {
 	if err != nil {
 		fmt.Println(string(body))
 		return hutomaChatResponse{}, errors.New("failed unmarshaling json response: " + err.Error())
+	}
+
+	if c.ChatID == "" {
+		c.ChatID = chatRes.ChatID
 	}
 
 	return chatRes, nil
