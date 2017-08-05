@@ -60,10 +60,10 @@ func startTelegramBot() {
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 		log.Printf("[Hutoma] %s", hres.Result.Answer)
 
-		// msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, hres.Result.Answer)
 		// msg.ReplyToMessageID = update.Message.MessageID
 
-		// bot.Send(msg)
+		bot.Send(msg)
 	}
 }
 

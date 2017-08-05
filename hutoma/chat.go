@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 const HUTOMA_BASE_URL = "https://api.hutoma.ai"
@@ -17,6 +18,8 @@ type HutomaClient struct {
 }
 
 func (c *HutomaClient) Chat(query string) (hutomaChatResponse, error) {
+	query = url.QueryEscape(query) // prepare query
+
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/v1/ai/%s/chat?q=%s", HUTOMA_BASE_URL, c.BotID, query), nil)
 	if err != nil {
 		return hutomaChatResponse{}, errors.New("failed creating get chat request: " + err.Error())
@@ -40,6 +43,7 @@ func (c *HutomaClient) Chat(query string) (hutomaChatResponse, error) {
 	var chatRes hutomaChatResponse
 	err = json.Unmarshal(body, &chatRes)
 	if err != nil {
+		fmt.Println(string(body))
 		return hutomaChatResponse{}, errors.New("failed unmarshaling json response: " + err.Error())
 	}
 
