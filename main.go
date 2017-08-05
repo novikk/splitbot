@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/mux"
 
@@ -19,6 +20,8 @@ var HUTOMA_DEV_KEY string
 var HUTOMA_CLIENT_KEY string
 
 var TELEGRAM_TOKEN string
+
+var lastSpeaker string
 
 func init() {
 	// init hutoma vars from environment
@@ -56,6 +59,18 @@ func startTelegramBot() {
 
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
+		// save last speaker
+		lastSpeaker = update.Message.From.FirstName + " " + update.Message.From.LastName
+		if lastSpeaker == "" {
+			lastSpeaker = update.Message.From.UserName
+		}
+
+		if lastSpeaker == "" {
+			lastSpeaker = strconv.Itoa(update.Message.From.ID)
+		}
+
+		webhooks.SetLastSpeaker(lastSpeaker)
+
 		// send the message to hutoma
 		hres, err := hc.Chat(update.Message.Text)
 		if err != nil {
@@ -76,11 +91,10 @@ func startTelegramBot() {
 }
 
 func startWebhooks() {
-	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/expense", webhooks.HandleExpense)
-	//myRouter.HandleFunc("/webhook", webhooks.HandleWebhook)
+	webhooksRouter := mux.NewRouter().StrictSlash(true)
+	webhooksRouter.HandleFunc("/expense", webhooks.HandleExpense)
 
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), myRouter))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), webhooksRouter))
 }
 
 func main() {
