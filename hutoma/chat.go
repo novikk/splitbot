@@ -21,7 +21,7 @@ type HutomaClient struct {
 func (c *HutomaClient) Chat(query string) (hutomaChatResponse, error) {
 	query = url.QueryEscape(query) // prepare query
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/v1/ai/%s/chat?q=%s", HUTOMA_BASE_URL, c.BotID, query), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/v1/ai/%s/chat?q=%s&chatId=%s", HUTOMA_BASE_URL, c.BotID, query, c.ChatID), nil)
 	if err != nil {
 		return hutomaChatResponse{}, errors.New("failed creating get chat request: " + err.Error())
 	}
