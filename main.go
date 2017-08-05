@@ -58,7 +58,7 @@ func startTelegramBot() {
 			return
 		}
 
-		if hres.Result.Answer == "Erm... What?" {
+		if hres.Result.Answer == "unknown" {
 			return
 		}
 
