@@ -2,7 +2,11 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
+	"github.com/novikk/splitbot/webhooks"
 
 	"gopkg.in/telegram-bot-api.v4"
 )
@@ -18,7 +22,7 @@ func init() {
 	HUTOMA_CLIENT_KEY = os.Getenv("HUTOMA_CLIENT_KEY")
 }
 
-func main() {
+func startTelegramBot() {
 	bot, err := tgbotapi.NewBotAPI("426886257:AAFevPoGCZlgDVPfeIrmjLLn-hRZyBw8boU")
 	if err != nil {
 		log.Panic(err)
@@ -45,4 +49,16 @@ func main() {
 
 		bot.Send(msg)
 	}
+}
+
+func startWebhooks() {
+	myRouter := mux.NewRouter().StrictSlash(true)
+	myRouter.HandleFunc("/webhook", webhooks.HandleWebhook)
+
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), myRouter))
+}
+
+func main() {
+	go startTelegramBot()
+	startWebhooks()
 }
