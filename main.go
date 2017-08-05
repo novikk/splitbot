@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/novikk/splitbot/hutoma"
 	"github.com/novikk/splitbot/webhooks"
 
 	"gopkg.in/telegram-bot-api.v4"
@@ -28,6 +29,8 @@ func init() {
 }
 
 func startTelegramBot() {
+	hc := hutoma.HutomaClient{HUTOMA_BOT_ID, HUTOMA_DEV_KEY, HUTOMA_CLIENT_KEY}
+
 	bot, err := tgbotapi.NewBotAPI(TELEGRAM_TOKEN)
 	if err != nil {
 		log.Panic(err)
@@ -47,12 +50,20 @@ func startTelegramBot() {
 			continue
 		}
 
+		// send the message to hutoma
+		hres, err := hc.Chat(update.Message.Text)
+		if err != nil {
+			log.Printf("Error chatting: %s\n", err)
+			return
+		}
+
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+		log.Printf("[Hutoma] %s", hres.Result.Answer)
 
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-		msg.ReplyToMessageID = update.Message.MessageID
+		// msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+		// msg.ReplyToMessageID = update.Message.MessageID
 
-		bot.Send(msg)
+		// bot.Send(msg)
 	}
 }
 
