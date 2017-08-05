@@ -21,7 +21,7 @@ func HandleExpense(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("HOW MUCH ---->", howMuch)
 	fmt.Println("WHO ---->", who)
 
-	msg := fmt.Sprintf("Perfect! I have recorded that %s owes %s to %s :)", who, howMuch, lastSpeaker)
+	msg := fmt.Sprintf("Perfect! I have registered that %s owes %s euros to %s :)", who, howMuch, lastSpeaker)
 
 	w.Write([]byte(`{"text":"` + msg + `"}`))
 	//fmt.Println(string(b))
