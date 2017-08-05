@@ -31,7 +31,7 @@ func init() {
 }
 
 func startTelegramBot() {
-	hc := hutoma.HutomaClient{HUTOMA_BOT_ID, HUTOMA_DEV_KEY, HUTOMA_CLIENT_KEY}
+	hc := hutoma.HutomaClient{HUTOMA_BOT_ID, HUTOMA_DEV_KEY, HUTOMA_CLIENT_KEY, ""}
 
 	bot, err := tgbotapi.NewBotAPI(TELEGRAM_TOKEN)
 	if err != nil {
