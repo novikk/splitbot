@@ -33,12 +33,14 @@ func init() {
 	// init telegram
 	TELEGRAM_TOKEN = os.Getenv("TELEGRAM_TOKEN")
 	s := sage.SageClient{}
-	s.RefreshToken = "4109e944807d9f7cda0c345fed136564a4a26501"
-	s.AccessToken = "9b872d0717eff2e296557dd09f0db4d2076a369a"
+	s.RefreshToken = "90b9253be9d09096589050a04227048df3804643"
+	s.AccessToken = "2ecf9281ebbb4871aefbad3882c4578a6b703403"
 	s.ResourceOwnerID = "cd955c24cdd52c60fa835a1ff54ffb4d"
-	s.ExpirationDate = 1501951648
+	s.ExpirationDate = 1501955245
 
+	/*fmt.Println(s.AddContact("Ricard", "CUSTOMER"))
 	fmt.Println(s.ShowContacts())
+	fmt.Println(s.AddExpenditure("Ricard", 100))*/
 }
 
 func startTelegramBot() {
