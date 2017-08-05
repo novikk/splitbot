@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -49,20 +50,22 @@ func startTelegramBot() {
 	for update := range updates {
 		if update.Message == nil {
 			continue
+		} else {
+			fmt.Println("?", update.Message)
 		}
+
+		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 		// send the message to hutoma
 		hres, err := hc.Chat(update.Message.Text)
 		if err != nil {
 			log.Printf("Error chatting: %s\n", err)
-			return
+			continue
 		}
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 		log.Printf("[Hutoma] %s", hres.Result.Answer)
-
 		if hres.Result.Answer == "unknown" {
-			return
+			continue
 		}
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, hres.Result.Answer)
